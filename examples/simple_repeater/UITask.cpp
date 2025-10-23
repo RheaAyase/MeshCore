@@ -2,7 +2,9 @@
 #include <Arduino.h>
 #include <helpers/CommonCLI.h>
 
-#define AUTO_OFF_MILLIS      20000  // 20 seconds
+#ifndef AUTO_OFF_MILLIS
+  #define AUTO_OFF_MILLIS    15000   // 15 seconds
+#endif
 #define BOOT_SCREEN_MILLIS   4000   // 4 seconds
 
 // 'meshcore', 128x13px
@@ -107,8 +109,11 @@ void UITask::loop() {
 
       _next_refresh = millis() + 1000;   // refresh every second
     }
+
+#if AUTO_OFF_MILLIS > 0
     if (millis() > _auto_off) {
       _display->turnOff();
     }
+#endif
   }
 }

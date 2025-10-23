@@ -3,7 +3,9 @@
 #include <helpers/TxtDataHelpers.h>
 #include "../MyMesh.h"
 
-#define AUTO_OFF_MILLIS     15000   // 15 seconds
+#ifndef AUTO_OFF_MILLIS
+  #define AUTO_OFF_MILLIS    15000   // 15 seconds
+#endif
 #define BOOT_SCREEN_MILLIS   3000   // 3 seconds
 
 #ifdef PIN_STATUS_LED
@@ -328,9 +330,12 @@ void UITask::loop() {
 
       _next_refresh = millis() + 1000;   // refresh every second
     }
+
+#if AUTO_OFF_MILLIS > 0
     if (millis() > _auto_off) {
       _display->turnOff();
     }
+#endif
   }
 }
 
