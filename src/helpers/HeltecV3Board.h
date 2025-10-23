@@ -73,7 +73,8 @@ public:
     if (pin_wake_btn < 0) {
       esp_sleep_enable_ext1_wakeup( (1L << P_LORA_DIO_1), ESP_EXT1_WAKEUP_ANY_HIGH);  // wake up on: recv LoRa packet
     } else {
-      esp_sleep_enable_ext1_wakeup( (1L << P_LORA_DIO_1) | (1L << pin_wake_btn), ESP_EXT1_WAKEUP_ANY_HIGH);  // wake up on: recv LoRa packet OR wake btn
+      esp_sleep_enable_ext1_wakeup( (1L << pin_wake_btn), ESP_EXT1_WAKEUP_ANY_HIGH);  // wake up on: wake btn
+      sleep(5000);
     }
 
     if (secs > 0) {
@@ -85,7 +86,11 @@ public:
   }
 
   void powerOff() override {
+#ifdef PIN_USER_BTN
+    enterDeepSleep(0, PIN_USER_BTN);
+#else
     enterDeepSleep(0);
+#endif
   }
 
   uint16_t getBattMilliVolts() override {
